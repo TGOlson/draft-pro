@@ -1,0 +1,18 @@
+{
+  "name": "Yahoo Fantasy Football Draft Pro",
+  "version": "1.0",
+  "description": "helping you be really efficient at losing your fantasy football league",
+  "permissions": ["declarativeContent", "activeTab", "tabs"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "page_action": {},
+  "content_scripts": [{
+      "matches": ["<all_urls>"],
+      "all_frames": false,
+      "js": ["content.js"],
+      "run_at": "document_end"
+  }],
+  "manifest_version": 2
+}
