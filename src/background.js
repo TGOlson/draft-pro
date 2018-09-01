@@ -28,8 +28,8 @@ chrome.pageAction.onClicked.addListener(() => {
   chrome.windows.create({
       url: 'popup.html',
       type: 'panel',
-      width: 400,
-      height: 300
+      width: 350,
+      height: 500
   });
 })
 
@@ -45,8 +45,8 @@ chrome.runtime.onInstalled.addListener(function() {
         // That fires when a page's URL contains a 'g' ...
         conditions: [
           new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { urlContains: 'chrome' },
-            // pageUrl: { urlContains: 'football.fantasysports.yahoo.com/draftclient' },
+            // pageUrl: { urlContains: 'chrome' },
+            pageUrl: { urlContains: 'football.fantasysports.yahoo.com/draftclient' },
           })
         ],
         // And shows the extension's page action.

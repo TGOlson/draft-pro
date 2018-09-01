@@ -1,21 +1,43 @@
 // function startLoop(cb) {
 
 const state = {
+  active: false,
   clearLoop: null,
   querySelector: '#ys-auction-draft-controls .ys-player .Fw-500'
 };
 
+const onValueChange = (value) => {
+  console.log('found new value', value);
+  chrome.runtime.sendMessage({type: 'VALUE_CHANGE', value});
+}
+
+const setActive = (active) => {
+  if(active) {
+    state.clearLoop = runLoop(state.querySelector, onValueChange);
+  } else {
+    state.clearLoop();
+    state.clearLoop = null;
+  }
+
+  state.active = active;
+}
+
 const handleAction = (action) => {
+  console.log('received action from background script', action);
   switch(action.type) {
     case 'SET_ACTIVE': {
-      if(action.active) {
-        state.clearLoop = runLoop(state.querySelector, (v) => console.log('found new value', v))
-      } else {
-        state.clearLoop();
-        state.clearLoop = null;
+      setActive(action.active);
+      break;
+    }
+
+    case 'SET_QUERY_SELECTOR': {
+      state.querySelector = action.selector;
+      if (state.active) {
+        setActive(false);
+        setActive(true);
       }
 
-      return;
+      break;
     }
 
     default: console.log('Unknown action: ', action);
@@ -27,21 +49,15 @@ window.onload = function() {
   chrome.runtime.onMessage.addListener(handleAction);
 }
 
-// chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-//     console.log('got message', request);
-//     // var data = request.data || {};
-//     //
-//     // var linksList = document.querySelectorAll('a');
-//     // [].forEach.call(linksList, function(header) {
-//     //     header.innerHTML = request.data;
-//     // });
-//     // sendResponse({data: data, success: true});
-// });
-
-// let player = null;
-//
 const findNodeText = (querySelector) => {
-  var node = document.querySelector(querySelector)
+  let node = null;
+
+  try {
+    node = document.querySelector(querySelector)
+  } catch(err) {
+    console.log('caught error in findNodeText', err);
+  }
+
   return node && node.textContent;
 }
 
@@ -49,7 +65,7 @@ const runLoop = (querySelector, onChange) => {
   console.log('using query selector', querySelector);
 
   let value = findNodeText(querySelector);
-  console.log('initial value', value);
+  onChange(value);
 
   const id = setInterval(() => {
     var nextValue = findNodeText(querySelector)

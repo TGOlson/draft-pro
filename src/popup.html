@@ -2,16 +2,24 @@
 <html>
   <head>
     <style>
-      body {
-          width: 300px;
+      #active {
+        font-style: italic;
+      }
+
+      #stats {
+        font-style: italic;
       }
 
       #toggle-active {
         float: right;
       }
 
+      #current-player {
+        font-weight: bold;
+      }
+
       #query-selector {
-        width: 250px;
+        width: 285px;
       }
     </style>
     <script src="./popup.js"></script>
@@ -19,8 +27,11 @@
   <body>
     <h1>Yahoo Draft Pro</h1>
     <button id="toggle-active">Enable</button>
-    <p>Status: <span id="active">Not running</span></p>
-    <p>query: <input type="text" id="query-selector" value='#ys-auction-draft-controls .ys-player .Fw-500'></p>
+    <p>Status: <span id="active">not running</span></p>
+    <p>Query: <input type="text" id="query-selector" value='#ys-auction-draft-controls .ys-player .Fw-500'></p>
+    <hr>
     <p>Current player: <span id="current-player">none<span></p>
+    <p>Stats</p>
+    <p id="stats">n/a</p>
   </body>
 </html>

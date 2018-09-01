@@ -19,7 +19,7 @@ window.onload = function() {
     sendMessage({type: 'SET_ACTIVE', active: state.active});
     //
     if (state.active) {
-      document.querySelector('#active').innerText = 'Running!'
+      document.querySelector('#active').innerText = 'running!'
       document.querySelector('#toggle-active').innerText = 'Disable'
     //
     //   clear = startLoop(player => {
@@ -28,7 +28,7 @@ window.onload = function() {
     //   });
     //
     } else {
-      document.querySelector('#active').innerText = 'Not running!'
+      document.querySelector('#active').innerText = 'not running'
       document.querySelector('#toggle-active').innerText = 'Enable'
       document.querySelector('#current-player').innerText = 'none'
     //   clear();
@@ -37,7 +37,22 @@ window.onload = function() {
     }
   })
 
-  document.querySelector('#query-selector').addEventListener('change', (e) => {
-    console.log(e)
+  document.querySelector('#query-selector').addEventListener('keyup', (e) => {
+    sendMessage({type: 'SET_QUERY_SELECTOR', selector: e.target.value})
   });
+
+  const handleAction = (action) => {
+    console.log('received action from content script', action);
+
+    switch(action.type) {
+      case 'VALUE_CHANGE': {
+        document.querySelector('#current-player').innerText = (action.value && action.value.trim()) || 'none'
+        break;
+      }
+
+      default: console.log('Unknown action: ', action);
+    }
+  }
+
+  chrome.runtime.onMessage.addListener(handleAction);
 }

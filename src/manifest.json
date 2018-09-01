@@ -10,8 +10,8 @@
   "page_action": {},
   "content_scripts": [{
       "matches": ["<all_urls>"],
-      "all_frames": false,
       "js": ["content.js"],
+      "all_frames": false,
       "run_at": "document_end"
   }],
   "manifest_version": 2
